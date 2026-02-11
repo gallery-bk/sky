@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sky gallery</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400;500;600;700;800;900&family=Tomorrow:wght@400;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Share Tech Mono', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Tall scroll container - 500% viewport so we have 5 scroll phases */
+    .scroll-trigger {
+      height: 500vh;
+      position: relative;
+    }
+
+    /* Sticky viewport - stays in place while content scrolls */
+    .viewport {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Separate background layer: transform is reliable on mobile (GPU compositing) */
+    .viewport-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 150vh;
+      z-index: 0;
+      will-change: transform;
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-image: url('/Users/akaplan/Documents/background.jpg'), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920');
+      transform: translateY(calc(var(--bg-y-px, 0) * -1px));
+    }
+
+    /* Overlay for better text readability */
+    .viewport::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.15) 0%,
+        transparent 20%,
+        transparent 80%,
+        rgba(0, 0, 0, 0.2) 100%
+      );
+      pointer-events: none;
+    }
+
+    .line {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: hidden;
+      transition: none;
+      flex-shrink: 0;
+      padding-left: 5vw;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-bottom: -1vh;
+    }
+    .line:last-child {
+      margin-bottom: 0;
+    }
+
+    .line span {
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      line-height: 0;
+      transform-origin: left center;
+    }
+
+    /* Heights driven by CSS variables from JS */
+    .line-1 {
+      height: var(--h1, 0%);
+      /* padding-top: 5vw; */
+    }
+    .line-2 {
+      height: var(--h2, 100%);
+      padding-bottom: calc(var(--h2-num, 0) * 0.08vh);
+      padding-left: 2.5vw;
+    }
+    .line-3 {
+      height: var(--h3, 0%);
+    }
+    .line-4 {
+      height: var(--h4, 0%);
+    }
+    .line-5 {
+      height: var(--h5, 0%);
+    }
+    .line-6 {
+      height: var(--h6, 0%);
+    }
+
+    /* Static width (font-size in vw); dynamic height via scaleY so text fills 80% of row */
+    .line-1 span { font-size: 5vw; transform: scaleY(calc((var(--h1-num, 0) * 1vh) / (5 * 1vw))); }
+    .line-2 span { font-family: 'Tomorrow', sans-serif; font-weight: 500; font-size: 30vw; transform: scaleY(calc((var(--h2-num, 0) * 1vh) / (25 * 1vw))); }
+    .line-3 span { font-size: 5vw; transform: scaleY(calc((var(--h3-num, 0) * 1vh) / (5 * 1vw))); }
+    .line-4 span { font-size: 5vw; transform: scaleY(calc((var(--h4-num, 0) * 1vh) / (5 * 1vw))); }
+    .line-5 span { font-size: 5vw; transform: scaleY(calc((var(--h5-num, 0) * 1vh) / (5 * 1vw))); }
+    .line-6 span { font-size: 5vw; transform: scaleY(calc((var(--h6-num, 0) * 1vh) / (5 * 1vw))); }
+  </style>
+</head>
+<body>
+  <div class="scroll-trigger">
+    <div class="viewport" id="viewport">
+      <div class="viewport-bg" aria-hidden="true"></div>
+      <div class="line line-1"><span>the</span></div>
+      <div class="line line-2"><span>SKY</span></div>
+      <div class="line line-3"><span>which leaves</span></div>
+      <div class="line line-4"><span>beneath it</span></div>
+      <div class="line line-5"><span>a sea of</span></div>
+      <div class="line line-6"><span>beauty.</span></div>
+    </div>
+  </div>
+
+  <script>
+    const viewport = document.getElementById('viewport');
+
+    // Each keyframe: heights as % of viewport; bgY = background image position Y (5% per keyframe)
+    const keyframes = [
+      { h1: 0,   h2: 90,  h3: 0,   h4: 0,   h5: 0,   h6: 0,   bgY: 0   },  // 0%
+      { h1: 10,  h2: 80,  h3: 10,  h4: 0,   h5: 0,   h6: 0,   bgY: 5   },  // 20%
+      { h1: 12,  h2: 64,  h3: 12,  h4: 12,  h5: 0,   h6: 0,   bgY: 10  },  // 40%
+      { h1: 14,  h2: 44,  h3: 14,  h4: 14,  h5: 14,  h6: 0,   bgY: 15  },  // 60%
+      { h1: 15, h2: 25, h3: 15, h4: 15, h5: 15, h6: 15, bgY: 20 }, // 80%
+      { h1: 5, h2: 20, h3: 5, h4: 5, h5: 5, h6: 5, bgY: 25 }   // 100%
+    ];
+
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function getScrollPhase() {
+      const trigger = document.querySelector('.scroll-trigger');
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const totalScroll = trigger.offsetHeight - window.innerHeight;
+      if (totalScroll <= 0) return 0;
+      const p = Math.min(1, scrollTop / totalScroll);
+      return p; // 0 to 1
+    }
+
+    function getInterpolatedKeyframe(phase) {
+      // phase is 0..1, we have 6 keyframes at 0, 0.2, 0.4, 0.6, 0.8, 1.0
+      if (phase >= 1) return keyframes[5];
+      const segments = 5;
+      const segmentIndex = Math.min(Math.floor(phase * segments), segments - 1);
+      const segmentT = (phase * segments) - segmentIndex;
+      const k1 = keyframes[segmentIndex];
+      const k2 = keyframes[segmentIndex + 1];
+      return {
+        h1: lerp(k1.h1, k2.h1, segmentT),
+        h2: lerp(k1.h2, k2.h2, segmentT),
+        h3: lerp(k1.h3, k2.h3, segmentT),
+        h4: lerp(k1.h4, k2.h4, segmentT),
+        h5: lerp(k1.h5, k2.h5, segmentT),
+        h6: lerp(k1.h6, k2.h6, segmentT),
+        bgY: lerp(k1.bgY, k2.bgY, segmentT)
+      };
+    }
+
+    function updateHeights() {
+      const phase = getScrollPhase();
+      const k = getInterpolatedKeyframe(phase);
+      ['1', '2', '3', '4', '5', '6'].forEach(i => {
+        const h = k['h' + i];
+        viewport.style.setProperty('--h' + i, h + '%');
+        viewport.style.setProperty('--h' + i + '-num', h);
+      });
+      /* Pixel-based movement so background scrolls reliably on mobile (transform compositing) */
+      var maxMovePx = 0.5 * window.innerHeight;
+      viewport.style.setProperty('--bg-y-px', (k.bgY / 50) * maxMovePx);
+    }
+
+    function tick() {
+      updateHeights();
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+    window.addEventListener('resize', updateHeights);
+    window.addEventListener('scroll', function() { updateHeights(); }, { passive: true });
+  </script>
+</body>
+</html>
