@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>sky gallery</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,25 +30,26 @@
       position: relative;
     }
 
-    /* Sticky viewport - stays in place while content scrolls */
+    /* Sticky viewport - full height including iOS safe areas (notch, home bar) */
     .viewport {
       position: sticky;
       top: 0;
       left: 0;
       width: 100%;
       height: 100vh;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    /* Separate background layer: transform is reliable on mobile (GPU compositing) */
+    /* Background extends into iOS safe areas so it fills under status bar and home indicator */
     .viewport-bg {
       position: absolute;
-      top: 0;
+      top: calc(-1 * env(safe-area-inset-top, 0px));
       left: 0;
       width: 100%;
-      height: 150vh;
+      height: calc(150vh + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
       z-index: 0;
       will-change: transform;
       background-size: cover;
