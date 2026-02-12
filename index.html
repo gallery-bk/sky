@@ -18,12 +18,28 @@
       box-sizing: border-box;
     }
 
+    /* Background on document root so it fills the screen on iOS (including behind Dynamic Island / Safari bar) */
     html {
       scroll-behavior: smooth;
       min-height: 100%;
       height: 100%;
-      background-color: transparent;
+      background-color: #2c4a6e;
       -webkit-tap-highlight-color: transparent;
+    }
+    html::before {
+      content: '';
+      position: fixed;
+      top: calc(-1 * env(safe-area-inset-top, 0px) - 60px);
+      left: calc(-1 * env(safe-area-inset-left, 0px));
+      right: calc(-1 * env(safe-area-inset-right, 0px));
+      bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 120px);
+      z-index: -1;
+      background-color: #2c4a6e;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      -webkit-background-size: cover;
     }
 
     body {
@@ -35,17 +51,16 @@
       position: relative;
     }
 
-    /* Fixed full-bleed: extend past safe areas so image sits behind Dynamic Island and Safari bar */
+    /* Fallback fixed layer (matches html::before) in case pseudo-element is clipped on some browsers */
     .page-bg {
       position: fixed;
-      /* Extra -60px top (Dynamic Island), -120px bottom (Safari search bar) so image fills behind chrome */
       top: calc(-1 * env(safe-area-inset-top, 0px) - 60px);
       left: calc(-1 * env(safe-area-inset-left, 0px));
       right: calc(-1 * env(safe-area-inset-right, 0px));
       bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 120px);
-      z-index: -1;
+      z-index: -2;
       background-color: #2c4a6e;
-      background-image: url('background.jpg');
+      background-image: url('background.jpg'), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920');
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
@@ -181,10 +196,10 @@
     // Each keyframe: heights as % of viewport; bgY = background image position Y (5% per keyframe)
     const keyframes = [
       { h1: 0,   h2: 90,  h3: 0,   h4: 0,   h5: 0,   h6: 0,   bgY: 0   },  // 0%
-      { h1: 10,  h2: 80,  h3: 10,  h4: 0,   h5: 0,   h6: 0,   bgY: 32   },  // 20%
-      { h1: 12,  h2: 64,  h3: 12,  h4: 12,  h5: 0,   h6: 0,   bgY: 44  },  // 40%
-      { h1: 14,  h2: 44,  h3: 14,  h4: 14,  h5: 14,  h6: 0,   bgY: 36  },  // 60%
-      { h1: 15, h2: 25, h3: 15, h4: 15, h5: 15, h6: 15, bgY: 48 }, // 80%
+      { h1: 10,  h2: 80,  h3: 10,  h4: 0,   h5: 0,   h6: 0,   bgY: 10   },  // 20%
+      { h1: 12,  h2: 64,  h3: 12,  h4: 12,  h5: 0,   h6: 0,   bgY: 20  },  // 40%
+      { h1: 14,  h2: 44,  h3: 14,  h4: 14,  h5: 14,  h6: 0,   bgY: 30  },  // 60%
+      { h1: 15, h2: 25, h3: 15, h4: 15, h5: 15, h6: 15, bgY: 40 }, // 80%
       { h1: 5, h2: 20, h3: 5, h4: 5, h5: 5, h6: 5, bgY: 50 }   // 100%
     ];
 
