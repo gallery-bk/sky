@@ -66,16 +66,14 @@
       position: relative;
     }
 
-    /* Sticky viewport - starts at top of screen so "SKY" is visible without scrolling */
+    /* Sticky viewport - one screen tall, content starts at top; -webkit-fill-available fixes iOS display */
     .viewport {
       position: sticky;
       top: 0;
       left: 0;
       width: 100%;
-      min-height: 100vh;
+      height: 100dvh;
       min-height: -webkit-fill-available;
-      height: 100vh;
-      /* height: -webkit-fill-available; */
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -236,6 +234,14 @@
   <script>
     const viewport = document.getElementById('viewport');
 
+    var scrollTrigger = document.querySelector('.scroll-trigger');
+    function setViewportHeight() {
+      var h = window.innerHeight;
+      viewport.style.height = h + 'px';
+      viewport.style.minHeight = h + 'px';
+      scrollTrigger.style.height = (5 * h) + 'px';
+    }
+
     // Each keyframe: heights as % of viewport; bgY = background image position Y (5% per keyframe)
     const keyframes = [
       { h1: 0,   h2: 90,  h3: 0,   h4: 0,   h5: 0,   h6: 0,   bgY: 0   },  // 0%
@@ -280,6 +286,7 @@
     }
 
     function updateHeights() {
+      setViewportHeight();
       const phase = getScrollPhase();
       const bottomInfo = document.getElementById('bottom-info');
       if (bottomInfo) {
@@ -307,9 +314,12 @@
       }
       requestAnimationFrame(tick);
     }
+    setViewportHeight();
+    window.scrollTo(0, 0);
     requestAnimationFrame(tick);
     window.addEventListener('resize', updateHeights);
     window.addEventListener('scroll', function() { updateHeights(); }, { passive: true });
+    window.addEventListener('orientationchange', function() { setTimeout(updateHeights, 100); });
   </script>
 </body>
 </html>
