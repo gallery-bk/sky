@@ -28,15 +28,6 @@
       -webkit-tap-highlight-color: transparent;
       -webkit-overflow-scrolling: touch;
     }
-    html::before {
-      content: '';
-      position: fixed;
-      top: calc(-1 * env(safe-area-inset-top, 0px) - 60px);
-      left: calc(-1 * env(safe-area-inset-left, 0px));
-      right: calc(-1 * env(safe-area-inset-right, 0px));
-      bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 120px);
-      z-index: -1;
-    }
 
     body {
       font-family: 'Share Tech Mono', sans-serif;
