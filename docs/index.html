@@ -28,6 +28,15 @@
       -webkit-tap-highlight-color: transparent;
       -webkit-overflow-scrolling: touch;
     }
+    html::before {
+      content: '';
+      position: fixed;
+      top: calc(-1 * env(safe-area-inset-top, 0px) - 60px);
+      left: calc(-1 * env(safe-area-inset-left, 0px));
+      right: calc(-1 * env(safe-area-inset-right, 0px));
+      bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 120px);
+      z-index: -1;
+    }
 
     body {
       font-family: 'Share Tech Mono', sans-serif;
@@ -51,26 +60,25 @@
       background-color: #97AED7;
     }
 
-    /* Tall scroll container - 500% viewport so we have 5 scroll phases */
+    /* Tall scroll container - height set in JS to 500 * innerHeight so sticky viewport stays visible for full scroll */
     .scroll-trigger {
-      height: 500dvh;
+      height: 500vh;
       position: relative;
     }
 
-    /* Sticky viewport - extends into safe areas so text and background fill top/bottom (Dynamic Island, Safari bar) */
+    /* Sticky viewport - height set in JS to window.innerHeight so it fills exactly one screen and stays visible while scrolling */
     .viewport {
       position: sticky;
-      top: calc(-1 * env(safe-area-inset-top, 0px));
+      top: 0;
       left: 0;
       width: 100%;
-      height: 100dvh;
+      min-height: 100vh;
       min-height: -webkit-fill-available;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       transform: translateZ(0);
-      will-change: scroll-position;
-      contain: layout style;
     }
 
     /* Background layer for viewport (scrolls with transform); fills full viewport including safe areas */
@@ -225,6 +233,14 @@
   <script>
     const viewport = document.getElementById('viewport');
 
+    var scrollTrigger = document.querySelector('.scroll-trigger');
+    function setViewportHeight() {
+      var h = window.innerHeight;
+      viewport.style.height = h + 'px';
+      viewport.style.minHeight = h + 'px';
+      scrollTrigger.style.height = (5 * h) + 'px';
+    }
+
     // Each keyframe: heights as % of viewport; bgY = background image position Y (5% per keyframe)
     const keyframes = [
       { h1: 0,   h2: 90,  h3: 0,   h4: 0,   h5: 0,   h6: 0,   bgY: 0   },  // 0%
@@ -269,6 +285,7 @@
     }
 
     function updateHeights() {
+      setViewportHeight();
       const phase = getScrollPhase();
       const bottomInfo = document.getElementById('bottom-info');
       if (bottomInfo) {
@@ -296,9 +313,12 @@
       }
       requestAnimationFrame(tick);
     }
+    setViewportHeight();
+    window.scrollTo(0, 0);
     requestAnimationFrame(tick);
     window.addEventListener('resize', updateHeights);
     window.addEventListener('scroll', function() { updateHeights(); }, { passive: true });
+    window.addEventListener('orientationchange', function() { setTimeout(updateHeights, 100); });
   </script>
 </body>
 </html>
