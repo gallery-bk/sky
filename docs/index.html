@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#2c4a6e">
+  <meta name="theme-color" content="#8095B8">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>sky gallery</title>
   <link rel="icon" type="image/png" href="favicon.png">
@@ -23,7 +23,7 @@
       scroll-behavior: smooth;
       min-height: 100%;
       height: 100%;
-      background-color: transparent;
+      background-color: #8095B8;
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
       -webkit-overflow-scrolling: touch;
@@ -37,6 +37,7 @@
       right: calc(-1 * env(safe-area-inset-right, 0px));
       bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 120px);
       z-index: -1;
+      background-color: #8095B8;
     }
 
     body {
@@ -46,7 +47,7 @@
       -webkit-overflow-scrolling: touch;
       min-height: 100%;
       height: 100%;
-      background-color: transparent;
+      background-color: #8095B8;
       position: relative;
     }
 
@@ -237,10 +238,7 @@
 
     var scrollTrigger = document.querySelector('.scroll-trigger');
     function setViewportHeight() {
-      var h = window.innerHeight;
-      viewport.style.height = h + 'px';
-      viewport.style.minHeight = h + 'px';
-      scrollTrigger.style.height = (5 * h) + 'px';
+      /* Rely on CSS 100dvh / 500dvh so iOS fills behind Dynamic Island and Safari bar; no JS override */
     }
 
     // Each keyframe: heights as % of viewport; bgY = background image position Y (5% per keyframe)
