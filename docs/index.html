@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
@@ -10,7 +11,9 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400;500;600;700;800;900&family=Tomorrow:wght@400;800&family=Quantico:wght@400;500;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400;500;600;700;800;900&family=Tomorrow:wght@400;800&family=Quantico:wght@400;500;800&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -21,15 +24,16 @@
     /* Background on document root so it fills the screen on iOS (including behind Dynamic Island / Safari bar) */
     html {
       scroll-behavior: smooth;
-      /* min-height: 100%; */
-      height: 100dvh;
-      /* min-height: -webkit-fill-available; */
+      min-height: 100%;
+      height: 100%;
+      min-height: -webkit-fill-available;
       background-color: #8095B8;
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: none;
     }
+
     /* Fixed background only – does not affect layout; extends so blue fills behind notch/bar */
     html::before {
       content: '';
@@ -47,9 +51,9 @@
       overflow-x: hidden;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
-      /* min-height: 100%; */
-      height: 100dvh;
-      /* min-height: -webkit-fill-available; */
+      min-height: 100%;
+      height: 100%;
+      min-height: -webkit-fill-available;
       background-color: #8095B8;
       position: relative;
       padding: 0;
@@ -81,9 +85,9 @@
       position: sticky;
       top: 0;
       left: 0;
-      width: 100%; 
+      width: 100%;
       height: 100dvh;
-      /* min-height: -webkit-fill-available; */
+      min-height: -webkit-fill-available;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -115,18 +119,17 @@
       position: absolute;
       inset: 0;
       z-index: 2;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.15) 0%,
-        transparent 20%,
-        transparent 80%,
-        rgba(0, 0, 0, 0.2) 100%
-      );
+      background: linear-gradient(to bottom,
+          rgba(0, 0, 0, 0.15) 0%,
+          transparent 20%,
+          transparent 80%,
+          rgba(0, 0, 0, 0.2) 100%);
       pointer-events: none;
     }
 
     .line {
-      position: relative;
+      position: absolute;
+      left: 0;
       z-index: 1;
       display: flex;
       align-items: center;
@@ -137,10 +140,11 @@
       padding-left: 4vw;
       padding-top: 0;
       padding-bottom: 0;
-      margin-top: -1.5vh;
-      margin-bottom: -1.5vh;
+      /* margin-top: 1vh;
+      margin-bottom: -1.5vh; */
       contain: layout;
     }
+
     .line:last-child {
       margin-bottom: 0;
     }
@@ -150,7 +154,6 @@
       color: #fff;
       letter-spacing: -0.01em;
       white-space: nowrap;
-      line-height: 0;
       transform-origin: left center;
     }
 
@@ -158,31 +161,61 @@
     .line-1 {
       height: var(--h1, 0%);
     }
+
     .line-2 {
       height: var(--h2, 100%);
-      padding-bottom: calc(var(--h2-num, 0) * 0.08vh);
+      padding-bottom: calc(var(--h2-num, 0) * 0.035vh);
       padding-left: 2.5vw;
     }
+
     .line-3 {
       height: var(--h3, 0%);
     }
+
     .line-4 {
       height: var(--h4, 0%);
     }
+
     .line-5 {
       height: var(--h5, 0%);
     }
+
     .line-6 {
       height: var(--h6, 0%);
     }
 
-    /* Static width (font-size in vw); dynamic height via scaleY so text fills 80% of row */
-    .line-1 span { font-size: 4vw; transform: scaleY(calc((var(--h1-num, 0) * 1vh) / (5 * 1vw))); }
-    .line-2 span { font-family: 'Tomorrow', sans-serif; font-weight: 300; font-size: 20vw; transform: scaleY(calc((var(--h2-num, 0) * 1vh) / (17 * 1vw))); }
-    .line-3 span { font-size: 4vw; transform: scaleY(calc((var(--h3-num, 0) * 1vh) / (5 * 1vw))); }
-    .line-4 span { font-size: 4vw; transform: scaleY(calc((var(--h4-num, 0) * 1vh) / (5 * 1vw))); }
-    .line-5 span { font-size: 4vw; transform: scaleY(calc((var(--h5-num, 0) * 1vh) / (5 * 1vw))); }
-    .line-6 span { font-size: 4vw; transform: scaleY(calc((var(--h6-num, 0) * 1vh) / (5 * 1vw))); }
+    /* scaleY = line height / ref height so text stretches to full height of line */
+    .line-1 span {
+      font-size: 4vw;
+      transform: scaleY(calc(var(--line-height-px, 0) / var(--ref-height-px, 1)));
+    }
+
+    .line-2 span {
+      font-family: 'Tomorrow', sans-serif;
+      font-weight: 300;
+      font-size: 20vw;
+      transform: scaleY(calc(var(--line-height-px, 0) / var(--ref-height-px, 1)));
+    }
+
+    .line-3 span {
+      font-size: 4vw;
+      transform: scaleY(calc(var(--line-height-px, 0) / var(--ref-height-px, 1)));
+    }
+
+    .line-4 span {
+      font-size: 4vw;
+      transform: scaleY(calc(var(--line-height-px, 0) / var(--ref-height-px, 1)));
+    }
+
+    .line-5 span {
+      font-size: 4vw;
+      transform: scaleY(calc(var(--line-height-px, 0) / var(--ref-height-px, 1)));
+    }
+
+    .line-6 span {
+      font-size: 4vw;
+      transform: scaleY(calc(var(--line-height-px, 0) / var(--ref-height-px, 1)));
+    }
 
     /* Bottom-right info block: only visible when scrolled to bottom, slides up from below */
     .bottom-info {
@@ -201,11 +234,13 @@
       transform: translateY(1.5rem);
       transition: opacity 0.4s ease, transform 0.5s ease;
     }
+
     .bottom-info.visible {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
     }
+
     .bottom-info a {
       display: block;
       color: #fff;
@@ -217,11 +252,13 @@
       padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
       margin-top: 0.25em;
     }
+
     .bottom-info a:hover {
       text-decoration: underline;
     }
   </style>
 </head>
+
 <body>
   <div class="page-bg" aria-hidden="true"></div>
   <div class="bottom-info" id="bottom-info">
@@ -248,10 +285,10 @@
 
     // Each keyframe: heights as % of viewport; bgY = background image position Y (5% per keyframe)
     const keyframes = [
-      { h1: 0,   h2: 90,  h3: 0,   h4: 0,   h5: 0,   h6: 0,   bgY: 0   },  // 0%
-      { h1: 10,  h2: 80,  h3: 10,  h4: 0,   h5: 0,   h6: 0,   bgY: 10   },  // 20%
-      { h1: 5,  h2: 70,  h3: 5,  h4: 20,  h5: 0,   h6: 0,   bgY: 20  },  // 40%
-      { h1: 5,  h2: 60,  h3: 5,  h4: 5,  h5: 25,  h6: 0,   bgY: 30  },  // 60%
+      { h1: 0, h2: 90, h3: 0, h4: 0, h5: 0, h6: 0, bgY: 0 },  // 0%
+      { h1: 10, h2: 80, h3: 10, h4: 0, h5: 0, h6: 0, bgY: 10 },  // 20%
+      { h1: 5, h2: 70, h3: 5, h4: 20, h5: 0, h6: 0, bgY: 20 },  // 40%
+      { h1: 5, h2: 60, h3: 5, h4: 5, h5: 25, h6: 0, bgY: 30 },  // 60%
       { h1: 5, h2: 50, h3: 5, h4: 5, h5: 5, h6: 30, bgY: 40 }, // 80%
       { h1: 5, h2: 20, h3: 5, h4: 5, h5: 5, h6: 5, bgY: 50 }   // 100%
     ];
@@ -289,18 +326,49 @@
     }
 
     function updateHeights() {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var totalHeight = scrollTrigger.offsetHeight;
+      var visibleHeight = window.innerHeight;
+      var topPct = totalHeight > 0 ? ((scrollTop / totalHeight) * 100).toFixed(1) : '0';
       var phase = getScrollPhase();
       const bottomInfo = document.getElementById('bottom-info');
       if (bottomInfo) {
         bottomInfo.classList.toggle('visible', phase >= 0.95);
       }
       const k = getInterpolatedKeyframe(phase);
+      var sum = k.h1 + k.h2 + k.h3 + k.h4 + k.h5 + k.h6;
+      var scale = sum > 0 ? 100 / sum : 1;
+      var visibleTop = scrollTop;
+      var vv = window.visualViewport;
+      var visibleH = vv ? vv.height : window.innerHeight;
+      /* Condense text to top 60% only after 75% of scroll */
+      var condenseFactor = phase < 0.75 ? 1 : (1 - 0.6 * (phase - 0.75) / 0.25);
+      viewport.style.setProperty('--condense-factor', condenseFactor);
+      var gapBetweenLinesPx = 2;
+      var totalForLines = visibleH * condenseFactor - (5 * gapBetweenLinesPx);
+      var topPx = visibleTop;
+      var line1Norm = 0;
+      var line2TopPx = 0;
+      var line2HeightPx = 0;
       ['1', '2', '3', '4', '5', '6'].forEach(i => {
         const h = k['h' + i];
-        viewport.style.setProperty('--h' + i, h + '%');
-        viewport.style.setProperty('--h' + i + '-num', h);
+        const normalized = h * scale;
+        if (i === '1') line1Norm = normalized;
+        if (i === '2') line2TopPx = topPx;
+        viewport.style.setProperty('--h' + i, normalized + '%');
+        viewport.style.setProperty('--h' + i + '-num', normalized);
+        var lineEl = document.querySelector('.line-' + i);
+        if (lineEl) {
+          var heightPx = (normalized / 100) * totalForLines;
+          if (i === '2') line2HeightPx = heightPx;
+          var refHeightPx = (i === '2' ? 17 : 5) * (window.innerWidth || document.documentElement.clientWidth) / 100;
+          lineEl.style.setProperty('--line-height-px', heightPx);
+          lineEl.style.setProperty('--ref-height-px', refHeightPx);
+          lineEl.style.top = topPx + 'px';
+          lineEl.style.height = heightPx + 'px';
+          topPx += heightPx + gapBetweenLinesPx;
+        }
       });
-
       var oneScreenH = scrollTrigger.offsetHeight / 5;
       var maxMovePx = 0.5 * oneScreenH;
       viewport.style.setProperty('--bg-y-px', (k.bgY / 50) * maxMovePx);
@@ -322,8 +390,9 @@
     updateHeights();
     requestAnimationFrame(tick);
     window.addEventListener('resize', updateHeights);
-    window.addEventListener('scroll', function() { updateHeights(); }, { passive: true });
-    window.addEventListener('orientationchange', function() { setTimeout(updateHeights, 100); });
+    window.addEventListener('scroll', function () { updateHeights(); }, { passive: true });
+    window.addEventListener('orientationchange', function () { setTimeout(updateHeights, 100); });
   </script>
 </body>
+
 </html>
