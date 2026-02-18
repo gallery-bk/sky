@@ -256,12 +256,12 @@
     /* Email signup: right-aligned to match bottom-info, extends past right edge of screen */
     .signup-wrap {
       position: fixed;
-      top: var(--signup-top-pct, 35%);
+      top: 0;
       right: calc(1.5rem + env(safe-area-inset-right, 0px));
       left: auto;
-      width: min(220px, 85vw);
+      width: min(220px, 25vw);
       z-index: 15;
-      /* opacity: var(--signup-opacity, 0); */
+      opacity: var(--signup-opacity, 0);
       pointer-events: var(--signup-pointer, none);
       transition: opacity 0.3s ease;
     }
@@ -291,8 +291,9 @@
     .signup-form input[type="email"] {
       width: 100%;
       padding: 0.5rem 0.6rem;
-      border: 2px solid rgba(255,255,255,0.5);
-      border-radius: 4px;
+      border: 1px solid #e53935;
+      /* border: 2px solid rgba(255,255,255,0.5); */
+      /* border-radius: 4px; */
       background: rgba(255,255,255,0.25);
       color: #fff;
       font-size: 1rem;
@@ -421,8 +422,8 @@
       if (signupWrap) {
         if (phase >= 0.15) {
           signupWrap.classList.add('visible');
-          signupWrap.style.setProperty('--signup-top-pct', (35 + 20 * (phase - 0.15) / 0.85) + '%');
-          signupWrap.setAttribute('aria-hidden', 'false');
+          // signupWrap.style.setProperty('--signup-top-pct', (35 + 20 * (phase - 0.15) / 0.85) + '%');
+          // signupWrap.setAttribute('aria-hidden', 'false');
         } else {
           signupWrap.classList.remove('visible');
           signupWrap.style.setProperty('--signup-top-pct', '35%');
