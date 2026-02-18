@@ -26,7 +26,7 @@
       scroll-behavior: smooth;
       min-height: 100%;
       height: 100dvh;
-      /* min-height: -webkit-fill-available; */
+      min-height: -webkit-fill-available;
       background-color: #8095B8;
       overscroll-behavior: none;
       -webkit-text-size-adjust: 100%;
@@ -68,14 +68,11 @@
       background-color: #8095B8;
     }
 
-    /* Tall scroll container - 500% viewport so we have 5 scroll phases */
     .scroll-trigger {
       height: 500dvh;
       position: relative;
     }
 
-    /* Sticky viewport - extends into safe areas so text and background fill top/bottom (Dynamic Island, Safari bar) */
-    /* Sticky viewport - height set in JS to window.innerHeight so it fills exactly one screen and stays visible while scrolling */
     .viewport {
       position: sticky;
       top: 0;
@@ -91,7 +88,6 @@
       contain: layout style;
     }
 
-    /* Background layer for viewport (scrolls with transform); fills full viewport including safe areas */
     .viewport-bg {
       position: absolute;
       top: 0;
