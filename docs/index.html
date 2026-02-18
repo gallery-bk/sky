@@ -82,7 +82,7 @@
       left: 0;
       width: 100%;
       height: 100dvh;
-      min-height: -webkit-fill-available;
+      /* min-height: -webkit-fill-available; */
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -278,12 +278,6 @@
     const viewport = document.getElementById('viewport');
 
     var scrollTrigger = document.querySelector('.scroll-trigger');
-    function setViewportHeight() {
-      var h = window.outerHeight;
-      viewport.style.height = h + 'px';
-      viewport.style.minHeight = h + 'px';
-      scrollTrigger.style.height = (5 * h) + 'px';
-    }
 
     // Each keyframe: heights as % of viewport; bgY = background image position Y (5% per keyframe)
     const keyframes = [
@@ -329,7 +323,7 @@
     }
 
     function updateHeights() {
-      setViewportHeight();
+      // setViewportHeight();
       const phase = getScrollPhase();
       const bottomInfo = document.getElementById('bottom-info');
       if (bottomInfo) {
@@ -357,7 +351,6 @@
       }
       requestAnimationFrame(tick);
     }
-    setViewportHeight();
     window.scrollTo(0, 0);
     requestAnimationFrame(tick);
     window.addEventListener('resize', updateHeights);
