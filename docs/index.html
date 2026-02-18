@@ -257,9 +257,9 @@
     .signup-wrap {
       position: fixed;
       top: 0;
-      right: calc(1.5rem + env(safe-area-inset-right, 0px));
+      right: 0;
       left: auto;
-      width: min(220px, 25vw);
+      width: min(220px, 45vw);
       z-index: 15;
       opacity: var(--signup-opacity, 0);
       pointer-events: var(--signup-pointer, none);
@@ -270,68 +270,77 @@
       --signup-pointer: auto;
     }
     .signup-form {
-      /* border: 2px solid #e53935;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(6px); */
-      padding: 1rem;
-      padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
+      /* border: 2px solid #e53935; */
+      /* background: rgba(255, 255, 255, 0.2); */
+      /* backdrop-filter: blur(6px); */
+      /* padding: 0.25rem; */
+      padding-top: 1rem;
+      /* padding-right: calc(3rem + env(safe-area-inset-right, 0px)); */
       /* border-radius: 6px; */
       font-family: 'Quantico', sans-serif;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
       text-align: right;
-      margin-right: calc(-1 * (2rem + env(safe-area-inset-right, 0px)));
-      min-width: 280px;
+      /* margin-right: calc(-1 * (4rem + env(safe-area-inset-right, 0px))); */
+      width: 100%;
     }
-    .signup-form label {
+    /* .signup-form label {
       display: block;
       color: #fff;
       font-size: clamp(0.75rem, 2.5vw, 1rem);
       margin-bottom: 0.5rem;
       text-shadow: 0 0 4px rgba(0,0,0,0.3);
-    }
+    } */
     .signup-form input[type="email"] {
       width: 100%;
       padding: 0.5rem 0.6rem;
-      border: 1px solid #e53935;
+      border: none;
+      border-bottom: 1px solid #e53935;
+      margin-left: 1rem;
       /* border: 2px solid rgba(255,255,255,0.5); */
       /* border-radius: 4px; */
       background: rgba(255,255,255,0.25);
       color: #fff;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.2rem;
       caret-color: #e53935;
       transition: border-width 0.2s ease, border-color 0.2s ease;
     }
     .signup-form input[type="email"]:focus {
       outline: none;
-      border: 2px solid #e53935;
+      /* border: 2px solid #e53935; */
     }
     .signup-form input[type="email"]::placeholder {
       color: rgba(255,255,255,0.7);
     }
     .signup-form button {
       width: 100%;
-      /* padding: 0.5rem; */
-      /* background: #e53935; */
-      background: none;
-      color: #e53935;
+      padding: 0.25rem;
+      background: #e53935;
+      margin-left: 1rem;
+      /* background: rgba(255,255,255,0.25); */
+      /* background: none; */
+      color: #fff;
       /* color: #fff; */
-      border: none;
+      border: 1px solid #e53935;
       /* border-radius: 4px; */
       text-align: left;
       font-family: 'Quantico', sans-serif;
-      font-size: clamp(0.75rem, 2.5vw, 1rem);
       cursor: pointer;
     }
     .signup-form button:hover {
       /* background: #c62828; */
-      text-decoration: underline;
+      background: #e53935;
+      /* text-decoration: underline; */
     }
     .signup-form .success,
     .signup-form .error {
       font-size: 0.85rem;
       margin-top: 0.5rem;
     }
-    .signup-form .success { color: #e53935; }
+    .signup-form .success { 
+      color: #e53935; 
+      padding-right: 0.5rem;
+      margin-top: 0.5rem;
+    }
     .signup-form .error { color: #e53935; }
   </style>
 </head>
@@ -342,9 +351,9 @@
     <form class="signup-form" id="signup-form" action="" method="POST" data-signup-url="https://script.google.com/macros/s/AKfycbwvXXLem5Z761w-yhw8FRrkz0FvCUYVtdmeWqHgQgIXag9-TpzUW1PLt-srCRECHYCO_w/exec">
       <!-- <label for="signup-email">signup to receive updates</label> -->
       <input type="email" id="signup-email" name="email" placeholder="email address" required>
-      <button type="submit">+ sign up to receive updates</button>
-      <div class="success" id="signup-success" hidden>Thanks! We&rsquo;ll be in touch.</div>
-      <div class="error" id="signup-error" hidden>Something went wrong. Try again.</div>
+      <button type="submit">sign up for updates</button>
+      <div class="success" id="signup-success" hidden>Thanks! Stay tuned for more info.</div>
+      <div class="error" id="signup-error" hidden>Please enter a valid email address.</div>
     </form>
   </div>
   <div class="bottom-info" id="bottom-info">
