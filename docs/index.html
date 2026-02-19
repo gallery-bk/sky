@@ -27,7 +27,7 @@
       min-height: 100%;
       height: 100%;
       min-height: -webkit-fill-available;
-      background-color: #8095B8;
+      background-color: #7D90B5;
       overscroll-behavior: none;
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
@@ -42,7 +42,7 @@
       right: calc(-1 * env(safe-area-inset-right, 0px));
       bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 120px);
       z-index: -1;
-      background-color: #8095B8;
+      background-color: #7D90B5;
     }
 
     body {
@@ -64,7 +64,7 @@
       right: calc(-1 * env(safe-area-inset-right, 0px));
       bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 120px);
       z-index: -2;
-      background-color: #8095B8;
+      background-color: #7D90B5;
     }
 
     .scroll-trigger {
@@ -135,7 +135,7 @@
     }
 
     .line:last-child {
-      margin-bottom: 0;
+      margin-bottom: 5vw;
     }
 
     .line span {
@@ -150,7 +150,6 @@
     /* Heights driven by CSS variables from JS */
     .line-1 {
       height: var(--h1, 0%);
-      /* padding-top: 5vw; */
     }
 
     .line-2 {
@@ -208,10 +207,41 @@
       transform: scaleY(calc((var(--h6-num, 0) * 1vh) / (5 * 1vw)));
     }
 
+    .banner {
+      position: fixed;
+      bottom: 0;
+      width: 100vw;
+      z-index: 10;
+      font-family: 'Quantico', sans-serif;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      color: #fff;
+      line-height: 1.5;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(1.5rem);
+      transition: opacity 0.4s ease, transform 0.5s ease;
+      text-align: center;
+      color: #fff;
+      font-weight: 500;
+      background: #e53935;
+      padding: 0.25em 0 0.25em 0.75em;
+    }
+
+    .banner.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .banner a {
+      text-decoration: underline;
+      color: #fff;
+    }
+
     .bottom-info {
       position: fixed;
       bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
-      right: calc(1.5rem + env(safe-area-inset-right, 0px));
+      right: calc(1rem + env(safe-area-inset-right, 0px));
       left: auto;
       width: min(350px, 65vw);
       max-width: min(350px, 65vw);
@@ -223,8 +253,8 @@
       line-height: 1.5;
       opacity: 0;
       pointer-events: none;
-      transform: translateY(1.5rem);
-      transition: opacity 0.4s ease, transform 0.5s ease;
+      transform: translateX(2.5rem);
+      transition: opacity 0.4s ease, transform 0.75s ease;
     }
 
     .bottom-info.visible {
@@ -233,24 +263,9 @@
       transform: translateY(0);
     }
 
-    .bottom-info a {
-      display: inline-block;
-      color: #fff;
-      font-weight: 500;
-      text-decoration: none;
-      background: #e53935;
-      padding: 0.25em 0 0.25em 0.75em;
-      margin-right: calc(-1 * (1.5rem + env(safe-area-inset-right, 0px)));
-      padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
-      margin-top: 0.25em;
-    }
-
-    .bottom-info a:hover {
-      text-decoration: underline;
-    }
-
     .bottom-info .signup-block {
       margin-top: 0.5em;
+      margin-bottom: 2em;
     }
 
     .signup-form {
@@ -259,9 +274,8 @@
       flex-wrap: wrap;
       align-items: stretch;
       gap: 0;
-      margin-top: 0.25em;
-      margin-right: calc(-1 * (1.5rem + env(safe-area-inset-right, 0px)));
-      padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
+      margin-right: calc(-1 * (1rem + env(safe-area-inset-right, 0px)));
+      padding-right: calc(1rem + env(safe-area-inset-right, 0px));
     }
 
     .signup-form .signup-label {
@@ -327,21 +341,24 @@
     }
 
     .signup-form .feedback.success {
-      color: #e53935;
+      color: #fff;
     }
 
     .signup-form .feedback.error {
-      color: #e53935;
+      color: #fff;
     }
   </style>
 </head>
 
 <body>
   <div class="page-bg" aria-hidden="true"></div>
+  <div class="banner" id="banner">
+    Now accepting <a href="https://forms.gle/b7pXFVxRciBeQtnp6">artist submissions</a> through March 6th.
+  </div>
   <div class="bottom-info" id="bottom-info">
     where: TBD!<br>
     when: TBD!<br>
-    <a href="https://forms.gle/b7pXFVxRciBeQtnp6">artist submissions</a>
+    <!-- <a href="https://forms.gle/b7pXFVxRciBeQtnp6">artist submissions</a> -->
     <div class="signup-block">
       <form class="signup-form" id="signup-form" action="" method="POST"
         data-signup-url="https://script.google.com/macros/s/AKfycbwvXXLem5Z761w-yhw8FRrkz0FvCUYVtdmeWqHgQgIXag9-TpzUW1PLt-srCRECHYCO_w/exec">
@@ -415,8 +432,12 @@
       // setViewportHeight();
       const phase = getScrollPhase();
       const bottomInfo = document.getElementById('bottom-info');
+      const bannerInfo = document.getElementById('banner');
       if (bottomInfo) {
         bottomInfo.classList.toggle('visible', phase >= 0.95);
+      }
+      if (bannerInfo) {
+        bannerInfo.classList.toggle('visible', phase >= 0.1);
       }
       const k = getInterpolatedKeyframe(phase);
       ['1', '2', '3', '4', '5', '6'].forEach(i => {
@@ -424,7 +445,7 @@
         viewport.style.setProperty('--h' + i, h + '%');
         viewport.style.setProperty('--h' + i + '-num', h);
       });
-      var maxMovePx = 0.25 * window.innerHeight;
+      var maxMovePx = 0.1 * window.innerHeight;
       viewport.style.setProperty('--bg-y-px', (k.bgY / 50) * maxMovePx);
     }
 
