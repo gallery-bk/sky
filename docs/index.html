@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#2c4a6e">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -21,12 +21,16 @@
       box-sizing: border-box;
     }
 
+    /* Background on document root so it fills the screen on iOS (including behind Dynamic Island / Safari bar) */
     html {
       scroll-behavior: smooth;
       min-height: 100%;
-      height: 100dvh;
-      min-height: -webkit-fill-available;
-      background-color: #8095B8;
+      height: 100%;
+      /* min-height: -webkit-fill-available; */
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-image: url('background.png');
       overscroll-behavior: none;
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
@@ -50,12 +54,13 @@
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
       height: 100%;
-      min-height: 100dvh;
-      min-height: -webkit-fill-available;
+      min-height: 100%;
+      /* min-height: -webkit-fill-available; */
       background-color: #8095B8;
       position: relative;
     }
 
+    /* Fallback fixed layer (matches html::before) in case pseudo-element is clipped on some browsers */
     .page-bg {
       position: fixed;
       top: calc(-1 * env(safe-area-inset-top, 0px) - 60px);
@@ -66,72 +71,48 @@
       background-color: #8095B8;
     }
 
+    /* Tall scroll container - 500% viewport so we have 5 scroll phases */
     .scroll-trigger {
       height: 500dvh;
       position: relative;
-      overflow: none;
     }
 
+    /* Sticky viewport - extends into safe areas so text and background fill top/bottom (Dynamic Island, Safari bar) */
+    /* Sticky viewport - height set in JS to window.innerHeight so it fills exactly one screen and stays visible while scrolling */
     .viewport {
       position: sticky;
       top: 0;
       left: 0;
       width: 100%;
       height: 100dvh;
-      max-height: 100dvh;
-      min-height: -webkit-fill-available;
+      /* min-height: -webkit-fill-available; */
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
       transform: translateZ(0);
       will-change: scroll-position;
       contain: layout style;
     }
 
+    /* Background layer for viewport (scrolls with transform); fills full viewport including safe areas */
     .viewport-bg {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 150dvh;
-      /* min-height: 100%; */
+      height: 150%;
+      min-height: 150%;
+      /* min-height: -webkit-fill-available; */
       z-index: 0;
-      overflow: none;
       will-change: transform;
       background-size: cover;
-      background-position: top center;
+      background-position: center center;
       background-repeat: no-repeat;
       background-image: url('background.png');
       transform: translateY(calc(var(--bg-y-px, 0) * -1px));
     }
 
-    .viewport-text-section {
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100dvh;
-      margin-top: -500dvh;
-      display: flex;
-      flex-direction: column;
-      z-index: 1;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .viewport-text-section .line {
-      pointer-events: auto;
-    }
-    .viewport-text-section::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 2;
-      background: linear-gradient(to bottom,
-          rgba(0, 0, 0, 0.15) 0%,
-          transparent 20%,
-          transparent 80%,
-          rgba(0, 0, 0, 0.2) 100%);
-      pointer-events: none;
-    }
-
+    /* Overlay for better text readability */
     .viewport::after {
       content: '';
       position: absolute;
@@ -174,6 +155,7 @@
       transform-origin: left center;
     }
 
+    /* Heights driven by CSS variables from JS */
     .line-1 {
       height: var(--h1, 0%);
       /* padding-top: 5vw; */
@@ -201,6 +183,7 @@
       height: var(--h6, 0%);
     }
 
+    /* Static width (font-size in vw); dynamic height via scaleY so text fills 80% of row */
     .line-1 span {
       font-size: 4vw;
       transform: scaleY(calc((var(--h1-num, 0) * 1vh) / (5 * 1vw)));
@@ -233,13 +216,12 @@
       transform: scaleY(calc((var(--h6-num, 0) * 1vh) / (5 * 1vw)));
     }
 
+    /* Bottom-right info block: only visible when scrolled to bottom, slides up from below */
     .bottom-info {
       position: fixed;
       bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
       right: calc(1.5rem + env(safe-area-inset-right, 0px));
       left: auto;
-      width: min(350px, 65vw);
-      max-width: min(350px, 65vw);
       text-align: right;
       z-index: 10;
       font-family: 'Quantico', sans-serif;
@@ -259,7 +241,7 @@
     }
 
     .bottom-info a {
-      display: inline-block;
+      display: block;
       color: #fff;
       font-weight: 500;
       text-decoration: none;
@@ -270,77 +252,9 @@
       margin-top: 0.25em;
     }
 
-    .bottom-info a:hover { 
+    .bottom-info a:hover {
       text-decoration: underline;
     }
- 
-    .bottom-info .signup-block {
-      margin-top: 0.5em;
-    }
-    .signup-form {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-items: stretch;
-      gap: 0;
-      margin-top: 0.25em;
-      margin-right: calc(-1 * (1.5rem + env(safe-area-inset-right, 0px)));
-      padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
-    }
-    .signup-form .signup-label {
-      flex-basis: 100%;
-      order: 1;
-      font-family: 'Quantico', sans-serif;
-      font-size: clamp(0.75rem, 2.5vw, 1rem);
-      color: #fff;
-      line-height: 1.5;
-      margin-top: 0.25em;
-    }
-    .signup-form input[type="email"] {
-      flex: 1;
-      min-width: 0;
-      padding: 0.25rem 0.5rem;
-      border: none;
-      border-bottom: 1px solid #e53935;
-      background: rgba(255,255,255,0.25);
-      color: #fff;
-      font-family: 'Quantico', sans-serif;
-      font-size: clamp(0.75rem, 2.5vw, 1rem);
-      caret-color: #e53935;
-    }
-    .signup-form input[type="email"]:focus {
-      outline: none;
-    }
-    .signup-form input[type="email"]::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-    .signup-form button {
-      flex-shrink: 0;
-      padding: 0.25rem 0 0.25rem 0.75em;
-      margin-right: calc(-1 * (1.5rem + env(safe-area-inset-right, 0px)));
-      padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
-      background: #e53935;
-      color: #fff;
-      border: 1px solid #e53935;
-      font-family: 'Quantico', sans-serif;
-      font-size: clamp(0.75rem, 2.5vw, 1rem);
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .signup-form button:hover {
-      text-decoration: underline;
-    }
-    .signup-form .feedback {
-      flex-basis: 100%;
-      order: 2;
-      font-family: 'Quantico', sans-serif;
-      font-size: clamp(0.75rem, 2.5vw, 1rem);
-      margin-top: 0.35em;
-      min-height: 1.4em;
-    }
-    .signup-form .feedback.sending { color: rgba(255,255,255,0.9); }
-    .signup-form .feedback.success { color: #a5d6a7; }
-    .signup-form .feedback.error { color: #ffab91; }
   </style>
 </head>
 
@@ -350,19 +264,10 @@
     where: TBD!<br>
     when: TBD!<br>
     <a href="https://forms.gle/b7pXFVxRciBeQtnp6">artist submissions</a>
-    <div class="signup-block">
-      <form class="signup-form" id="signup-form" action="" method="POST" data-signup-url="https://script.google.com/macros/s/AKfycbwvXXLem5Z761w-yhw8FRrkz0FvCUYVtdmeWqHgQgIXag9-TpzUW1PLt-srCRECHYCO_w/exec">
-        <input type="email" id="signup-email" name="email" placeholder="enter email to receive updates" required>
-        <button type="submit">sign up</button>
-        <div class="feedback" id="signup-feedback" aria-live="polite"></div>
-      </form>
-    </div>
   </div>
   <div class="scroll-trigger">
-    <div class="viewport" id="viewport" aria-hidden="true">
-      <div class="viewport-bg"></div>
-    </div>
-    <div class="viewport-text-section" id="viewport-text-section">
+    <div class="viewport" id="viewport">
+      <div class="viewport-bg" aria-hidden="true"></div>
       <div class="line line-1"><span>the</span></div>
       <div class="line line-2"><span>SKY</span></div>
       <div class="line line-3"><span>which leaves</span></div>
@@ -420,25 +325,20 @@
       };
     }
 
-    var textSection = document.getElementById('viewport-text-section');
-
     function updateHeights() {
-      if (textSection) {
-        textSection.style.setProperty('--viewport-inner-height', window.innerHeight + 'px');
-      }
+      // setViewportHeight();
       const phase = getScrollPhase();
       const bottomInfo = document.getElementById('bottom-info');
       if (bottomInfo) {
         bottomInfo.classList.toggle('visible', phase >= 0.95);
       }
       const k = getInterpolatedKeyframe(phase);
-      var lineTarget = textSection || viewport;
       ['1', '2', '3', '4', '5', '6'].forEach(i => {
         const h = k['h' + i];
-        lineTarget.style.setProperty('--h' + i, h + '%');
-        lineTarget.style.setProperty('--h' + i + '-num', h);
+        viewport.style.setProperty('--h' + i, h + '%');
+        viewport.style.setProperty('--h' + i + '-num', h);
       });
-      var maxMovePx = -3.65 * window.innerHeight;
+      var maxMovePx = 0.5 * window.innerHeight;
       viewport.style.setProperty('--bg-y-px', (k.bgY / 50) * maxMovePx);
     }
 
@@ -455,59 +355,10 @@
       requestAnimationFrame(tick);
     }
     window.scrollTo(0, 0);
-    updateHeights();
     requestAnimationFrame(tick);
     window.addEventListener('resize', updateHeights);
     window.addEventListener('scroll', function () { updateHeights(); }, { passive: true });
     window.addEventListener('orientationchange', function () { setTimeout(updateHeights, 100); });
-
-    (function () {
-      var form = document.getElementById('signup-form');
-      var feedbackEl = document.getElementById('signup-feedback');
-      if (!form || !feedbackEl) return;
-      var scriptUrl = (form.getAttribute('data-signup-url') || form.action || '').trim();
-      var urlReady = scriptUrl && scriptUrl !== 'PASTE_YOUR_SCRIPT_URL_HERE' && scriptUrl.indexOf('script.google.com') !== -1;
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        feedbackEl.textContent = '';
-        feedbackEl.className = 'feedback';
-        if (!urlReady) {
-          feedbackEl.textContent = 'Please enter a valid email address.';
-          feedbackEl.classList.add('error');
-          return;
-        }
-        var emailInput = form.querySelector('input[name="email"]');
-        var email = emailInput.value.trim();
-        if (!email) {
-          feedbackEl.textContent = 'Please enter your email.';
-          feedbackEl.classList.add('error');
-          return;
-        }
-        if (!emailInput.validity.valid) {
-          feedbackEl.textContent = 'Please enter a valid email address.';
-          feedbackEl.classList.add('error');
-          return;
-        }
-        feedbackEl.textContent = 'loading…';
-        feedbackEl.classList.add('sending');
-        var body = 'email=' + encodeURIComponent(email);
-        fetch(scriptUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: body,
-          mode: 'no-cors'
-        }).then(function () {
-          feedbackEl.textContent = 'Thanks! Stay tuned for more info.';
-          feedbackEl.classList.remove('sending');
-          feedbackEl.classList.add('success');
-          form.reset();
-        }).catch(function () {
-          feedbackEl.textContent = 'Something went wrong. Try again.';
-          feedbackEl.classList.remove('sending');
-          feedbackEl.classList.add('error');
-        });
-      });
-    })();
   </script>
 </body>
 
