@@ -24,15 +24,11 @@
     /* Background on document root so it fills the screen on iOS (including behind Dynamic Island / Safari bar) */
     html {
       scroll-behavior: smooth;
-      height: 100dvh;
+      height: 100%;
       min-height: 100dvh;
       min-height: -webkit-fill-available;
-      /* background-color: #7D90B5; */
+      background-color: #7D90B5;
       overscroll-behavior: none;
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-image: url('background.png');
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
       -webkit-overflow-scrolling: touch;
@@ -40,18 +36,16 @@
 
     body {
       font-family: 'Share Tech Mono', sans-serif;
+      top: 0;
+      bottom: 0;
       overflow-x: hidden;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
-      height: 100dvh;
+      height: 100%;
       min-height: 100dvh;
       min-height: -webkit-fill-available;
-      /* background-color: transparent; */
+      background-color: #7D90B5;
       position: relative;
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-image: url('background.png');
     }
 
     .scroll-trigger {
