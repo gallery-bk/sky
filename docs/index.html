@@ -52,12 +52,8 @@
       -webkit-overflow-scrolling: touch;
       height: 100%;
       min-height: 100%;
-      min-height: -webkit-fill-available;
-      /* background-color: #8095B8; */
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-image: url('background.png');
+      /* min-height: -webkit-fill-available; */
+      background-color: #8095B8;
       position: relative;
     }
 
@@ -69,7 +65,12 @@
       right: calc(-1 * env(safe-area-inset-right, 0px));
       bottom: calc(-1 * env(safe-area-inset-bottom, 0px) - 120px);
       z-index: -2;
-      background-color: #8095B8;
+      /* background-color: #8095B8; */
+      min-height: -webkit-fill-available;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-image: url('background.png');
     }
 
     /* Tall scroll container - 500% viewport so we have 5 scroll phases */
