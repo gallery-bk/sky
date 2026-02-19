@@ -208,12 +208,13 @@
       transform: scaleY(calc((var(--h6-num, 0) * 1vh) / (5 * 1vw)));
     }
 
-    /* Bottom-right info block: only visible when scrolled to bottom, slides up from below */
     .bottom-info {
       position: fixed;
       bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
       right: calc(1.5rem + env(safe-area-inset-right, 0px));
       left: auto;
+      width: min(350px, 65vw);
+      max-width: min(350px, 65vw);
       text-align: right;
       z-index: 10;
       font-family: 'Quantico', sans-serif;
@@ -233,7 +234,7 @@
     }
 
     .bottom-info a {
-      display: block;
+      display: inline-block;
       color: #fff;
       font-weight: 500;
       text-decoration: none;
@@ -247,6 +248,91 @@
     .bottom-info a:hover {
       text-decoration: underline;
     }
+
+    .bottom-info .signup-block {
+      margin-top: 0.5em;
+    }
+
+    .signup-form {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0;
+      margin-top: 0.25em;
+      margin-right: calc(-1 * (1.5rem + env(safe-area-inset-right, 0px)));
+      padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
+    }
+
+    .signup-form .signup-label {
+      flex-basis: 100%;
+      order: 1;
+      font-family: 'Quantico', sans-serif;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      color: #fff;
+      line-height: 1.5;
+      margin-top: 0.25em;
+    }
+
+    .signup-form input[type="email"] {
+      flex: 1;
+      min-width: 0;
+      padding: 0.25rem 0.5rem;
+      border: none;
+      border-bottom: 1px solid #e53935;
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      font-family: 'Quantico', sans-serif;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      caret-color: #e53935;
+    }
+
+    .signup-form input[type="email"]:focus {
+      outline: none;
+    }
+
+    .signup-form input[type="email"]::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .signup-form button {
+      flex-shrink: 0;
+      padding: 0.25rem 0 0.25rem 0.75em;
+      margin-right: calc(-1 * (1.5rem + env(safe-area-inset-right, 0px)));
+      padding-right: calc(1.5rem + env(safe-area-inset-right, 0px));
+      background: #e53935;
+      color: #fff;
+      border: 1px solid #e53935;
+      font-family: 'Quantico', sans-serif;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .signup-form button:hover {
+      text-decoration: underline;
+    }
+
+    .signup-form .feedback {
+      flex-basis: 100%;
+      order: 2;
+      font-family: 'Quantico', sans-serif;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      margin-top: 0.35em;
+      min-height: 1.4em;
+    }
+
+    .signup-form .feedback.sending {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .signup-form .feedback.success {
+      color: #e53935;
+    }
+
+    .signup-form .feedback.error {
+      color: #e53935;
+    }
   </style>
 </head>
 
@@ -256,6 +342,14 @@
     where: TBD!<br>
     when: TBD!<br>
     <a href="https://forms.gle/b7pXFVxRciBeQtnp6">artist submissions</a>
+    <div class="signup-block">
+      <form class="signup-form" id="signup-form" action="" method="POST"
+        data-signup-url="https://script.google.com/macros/s/AKfycbwvXXLem5Z761w-yhw8FRrkz0FvCUYVtdmeWqHgQgIXag9-TpzUW1PLt-srCRECHYCO_w/exec">
+        <input type="email" id="signup-email" name="email" placeholder="enter email to receive updates" required>
+        <button type="submit">sign up</button>
+        <div class="feedback" id="signup-feedback" aria-live="polite"></div>
+      </form>
+    </div>
   </div>
   <div class="scroll-trigger">
     <div class="viewport" id="viewport">
@@ -351,6 +445,54 @@
     window.addEventListener('resize', updateHeights);
     window.addEventListener('scroll', function () { updateHeights(); }, { passive: true });
     window.addEventListener('orientationchange', function () { setTimeout(updateHeights, 100); });
+
+    (function () {
+        var form = document.getElementById('signup-form');
+        var feedbackEl = document.getElementById('signup-feedback');
+        if (!form || !feedbackEl) return;
+        var scriptUrl = (form.getAttribute('data-signup-url') || form.action || '').trim();
+        var urlReady = scriptUrl && scriptUrl !== 'PASTE_YOUR_SCRIPT_URL_HERE' && scriptUrl.indexOf('script.google.com') !== -1;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          feedbackEl.textContent = '';
+          feedbackEl.className = 'feedback';
+          if (!urlReady) {
+            feedbackEl.textContent = 'Please enter a valid email address.';
+            feedbackEl.classList.add('error');
+            return;
+          }
+          var emailInput = form.querySelector('input[name="email"]');
+          var email = emailInput.value.trim();
+          if (!email) {
+            feedbackEl.textContent = 'Please enter your email.';
+            feedbackEl.classList.add('error');
+            return;
+          }
+          if (!emailInput.validity.valid) {
+            feedbackEl.textContent = 'Please enter a valid email address.';
+            feedbackEl.classList.add('error');
+            return;
+          }
+          feedbackEl.textContent = 'loading…';
+          feedbackEl.classList.add('sending');
+          var body = 'email=' + encodeURIComponent(email);
+          fetch(scriptUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body,
+            mode: 'no-cors'
+          }).then(function () {
+            feedbackEl.textContent = 'Thanks! Stay tuned for more info.';
+            feedbackEl.classList.remove('sending');
+            feedbackEl.classList.add('success');
+            form.reset();
+          }).catch(function () {
+            feedbackEl.textContent = 'Something went wrong. Try again.';
+            feedbackEl.classList.remove('sending');
+            feedbackEl.classList.add('error');
+          });
+        });
+      })();
   </script>
 </body>
 
