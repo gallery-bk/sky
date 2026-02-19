@@ -78,6 +78,7 @@
       left: 0;
       width: 100%;
       height: 100dvh;
+      max-height: 100dvh;
       min-height: -webkit-fill-available;
       overflow: hidden;
       transform: translateZ(0);
@@ -90,8 +91,8 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 30%;
-      min-height: 30%;
+      height: 150dvh;
+      /* min-height: 100%; */
       z-index: 0;
       overflow: none;
       will-change: transform;
@@ -437,7 +438,7 @@
         lineTarget.style.setProperty('--h' + i, h + '%');
         lineTarget.style.setProperty('--h' + i + '-num', h);
       });
-      var maxMovePx = -3.5 * window.innerHeight;
+      var maxMovePx = -3.65 * window.innerHeight;
       viewport.style.setProperty('--bg-y-px', (k.bgY / 50) * maxMovePx);
     }
 
