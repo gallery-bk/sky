@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="theme-color" content="#2c4a6e">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -320,36 +320,37 @@
     .signup-form .feedback {
       flex-basis: 100%;
       order: 2;
+      color: #fdffe6;
       font-family: 'Quantico', sans-serif;
-      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      font-size: clamp(0.65rem, 2vw, 0.9rem);
       margin-top: 0.35em;
       min-height: 1.4em;
     }
 
     .signup-form .feedback.sending {
-      color: rgba(255, 255, 255, 0.9);
+      color: #fdffe6;
     }
 
     .signup-form .feedback.success {
-      color: #fff;
+      color: #fdffe6;
     }
 
     .signup-form .feedback.error {
-      color: #fff;
+      color: #fdffe6;
     }
   </style>
 </head>
 
 <body>
   <div class="banner" id="banner">
-    Now accepting <a href="https://forms.gle/b7pXFVxRciBeQtnp6">artist submissions</a> through March 6th.
+    Now accepting <a href="https://forms.gle/kAajV3LUmm2Rpd6i6">artist submissions</a> through March 22nd.
   </div>
   <div class="bottom-info" id="bottom-info">
-    where: booklyn (exact location TBD)<br>
-    when: summer 2026 (exact dates TBD)<br>
+    where: TBD (brooklyn)<br>
+    when: summer 2026<br>
     <div class="signup-block">
       <form class="signup-form" id="signup-form" action="" method="POST"
-        data-signup-url="https://script.google.com/macros/s/AKfycbwvXXLem5Z761w-yhw8FRrkz0FvCUYVtdmeWqHgQgIXag9-TpzUW1PLt-srCRECHYCO_w/exec">
+        data-signup-url="https://script.google.com/macros/s/AKfycby3vDlBtWaZ6TO5F3a2vAedp8yJX9N4WFRRWySAIM-GJm9lFxhWX2SX_7xuN9CbXe1FOA/exec">
         <input type="email" id="signup-email" name="email" placeholder="enter email to receive updates" required>
         <button type="submit">sign up</button>
         <div class="feedback" id="signup-feedback" aria-live="polite"></div>
@@ -491,7 +492,7 @@
             body: body,
             mode: 'no-cors'
           }).then(function () {
-            feedbackEl.textContent = 'Thanks! Stay tuned for more info.';
+            feedbackEl.textContent = 'thank you! your email has been added to the list.';
             feedbackEl.classList.remove('sending');
             feedbackEl.classList.add('success');
             form.reset();
